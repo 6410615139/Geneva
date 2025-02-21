@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ sector.name }} - Details</title>
+</head>
+<body>
+    <h1>{{ sector.name }}</h1>
+    <p><strong>Latitude:</strong> {{ sector.latitude }}</p>
+    <p><strong>Longitude:</strong> {{ sector.longitude }}</p>
+
+    <h2>Check Results</h2>
+    <form method="get">
+        <label for="month">Enter Month (YYYY-MM):</label>
+        <input type="text" id="month" name="month" placeholder="2025-02" required>
+        <button type="submit">Check</button>
+    </form>
+
+    <a href="/">Back to Map</a>
+</body>
+</html>

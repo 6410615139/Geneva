@@ -23,42 +23,25 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Define River Basins (GeoJSON Format)
-        var riverBasins = [
-            {
-                "name": "แม่น้ำปิง (Ping River)",
-                "coords": [18.8000, 99.0000],  // Approximate coordinates
-                "color": "blue",
-                "id": 1
-            },
-            {
-                "name": "แม่น้ำเจ้าพระยา (Chao Phraya River)",
-                "coords": [15.2000, 100.5000],
-                "color": "green",
-                "id": 2
-            },
-            {
-                "name": "แม่น้ำโขง (Mekong River)",
-                "coords": [17.9500, 102.6000],
-                "color": "red",
-                "id": 3
-            }
-        ];
+        // Fetch data from Django
+        fetch('/api/sectors/')  // API endpoint
+            .then(response => response.json())
+            .then(sectors => {
+                sectors.forEach(sector => {
+                    var marker = L.circleMarker([sector.latitude, sector.longitude], {
+                        color: "blue",  // Default color
+                        radius: 10,
+                        fillOpacity: 0.7
+                    }).addTo(map);
 
-        // Add River Basin Polygons or Markers
-        riverBasins.forEach(river => {
-            var marker = L.circleMarker(river.coords, {
-                color: river.color,
-                radius: 10,
-                fillOpacity: 0.7
-            }).addTo(map);
+                    marker.bindPopup(`<b>${sector.name}</b><br><a href='/sector/${sector.id}/'>View Details</a>`);
 
-            marker.bindPopup(`<b>${river.name}</b><br><a href='/location/${river.id}/'>View Details</a>`);
-
-            marker.on('click', function() {
-                window.location.href = `/location/${river.id}/`;
-            });
-        });
+                    marker.on('click', function() {
+                        window.location.href = `/sector/${sector.id}/`;
+                    });
+                });
+            })
+            .catch(error => console.error("Error loading sector data:", error));
     </script>
 </body>
 </html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result for {{ sector.name }} ({{ result.month }})</title>
+</head>
+<body>
+    <h1>Result for {{ sector.name }} - {{ result.month }}</h1>
+    <p><strong>Status:</strong> {{ result.status }}</p>
+    <p><strong>Rain Forecast:</strong> {{ result.get_rain_forecast }}</p>
+    <p><strong>Suggestion:</strong> {{ result.get_suggestion }}</p>
+
+    {% if result.is_dry %}
+    <p style="color: red;"><strong>Warning:</strong> The sector is dry! Immediate action may be needed.</p>
+    {% endif %}
+
+    <a href="{% url 'sector_view' sector.name %}">Back to Sector</a>
+</body>
+</html>
