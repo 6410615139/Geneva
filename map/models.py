@@ -5,15 +5,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 class Sector(models.Model):
     name = models.CharField(max_length=255)
-    image = models.CharField(max_length=255)
-    latitude = models.FloatField()  # Storing latitude
-    longitude = models.FloatField()  # Storing longitude
+    image = models.ImageField(upload_to='sector/', null=True, blank=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
 
     def get_or_create_result(self, month):
         result, created = Result.objects.get_or_create(sector=self, month=month)
+        if result.status == "Dry":
+            result.broadcast()  # Fixed typo
         return result
 
     def __str__(self):
@@ -33,15 +34,9 @@ class Result(models.Model):
 
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE, related_name="results")
     month = models.CharField(max_length=20)
-    rain = models.TextField(blank=True)
-    suggestion = models.TextField(blank=True)
+    rain_image = models.ImageField(upload_to='rain/', null=True, blank=True)  # Fixed duplicate field
+    suggestion_image = models.ImageField(upload_to='suggestion/', null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=NORMAL)
-
-    def get_rain_forecast(self):
-        return self.rain
-
-    def get_suggestion(self):
-        return self.suggestion
 
     def is_dry(self):
         return self.status == self.DRY
@@ -54,7 +49,7 @@ class Result(models.Model):
 
         message = client.messages.create(
             messaging_service_sid=os.getenv("TWILIO_MESSAGING_SERVICE_SID"),
-            body="Warning: At {self.sector.name}, in month {self.month} is dry!",
+            body=f"Warning: At {self.sector.name}, in month {self.month}, it is dry!",
             to=phone
         )
         return message.sid
@@ -65,6 +60,9 @@ class Result(models.Model):
         members = Member.objects.all()
         for member in members:
             cls.notify(member.phone)
+
+    def __str__(self):
+        return f"Result for {self.sector.name} - {self.month}"
 
 
 class Member(models.Model):
