@@ -1,20 +1,31 @@
+{% load static %} 
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result for {{ sector.name }} ({{ result.month }})</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>River Basin Details</title>
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    </head>
 <body>
-    <h1>Result for {{ sector.name }} - {{ result.month }}</h1>
-    <p><strong>Status:</strong> {{ result.status }}</p>
-    <p><strong>Rain Forecast:</strong> {{ result.get_rain_forecast }}</p>
-    <p><strong>Suggestion:</strong> {{ result.get_suggestion }}</p>
+    <header>
+        <h2>รายละเอียดลุ่มแม่น้ำ (River Basin Details)</h2>
+        <p>คุณกำลังดูข้อมูลของลุ่มแม่น้ำ ID: {{ sector.id }}</p>
+        <p>คุณกำลังดูข้อมูลของเดือน: {{ result.month }}</p>
+        
+        <nav>
+            <a href="{% url 'sector_view' sector.id %}">Back to Sector</a>
+        </nav>
+    </header>
 
-    {% if result.is_dry %}
-    <p style="color: red;"><strong>Warning:</strong> The sector is dry! Immediate action may be needed.</p>
-    {% endif %}
+    <div class="container">
+        <img src="{{ result.rain_image.url }}" alt="{{ sector.name }}">
+    </div>  
+    <div class="container">
+        <img src="{{ result.suggestion_image.url }}" alt="{{ sector.name }}">
+    </div>
 
-    <a href="{% url 'sector_view' sector.name %}">Back to Sector</a>
+    
 </body>
 </html>

@@ -1,22 +1,50 @@
+{% load static %} 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ sector.name }} - Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>{{ sector.name }}</h1>
-    <p><strong>Latitude:</strong> {{ sector.latitude }}</p>
-    <p><strong>Longitude:</strong> {{ sector.longitude }}</p>
+    <header>
+        <h1>{{ sector.name }}</h1>
 
-    <h2>Check Results</h2>
-    <form method="get">
-        <label for="month">Enter Month (YYYY-MM):</label>
-        <input type="text" id="month" name="month" placeholder="2025-02" required>
-        <button type="submit">Check</button>
-    </form>
+        <nav>
+            <a href="/">Back to Map</a> 
+        </nav>
+    </header>
 
-    <a href="/">Back to Map</a>
+    <div class="container">
+        {% if month %}
+          <p>ผลการ predict สำหรับลุ่มแม่น้ำ {{ sector.name }} ID: {{ sector.id }} เดือน {{ month }}</p>
+        {% else %}
+          <form method="get" id="monthForm">
+            <label for="month">เลือกเดือน:</label>
+            <select name="month" id="month">
+              <option value="1">มกราคม</option>
+              <option value="2">กุมภาพันธ์</option>
+              <option value="3">มีนาคม</option>
+              <option value="4">เมษายน</option>
+              <option value="5">พฤษภาคม</option>
+              <option value="6">มิถุนายน</option>
+              <option value="7">กรกฎาคม</option>
+              <option value="8">สิงหาคม</option>
+              <option value="9">กันยายน</option>
+              <option value="10">ตุลาคม</option>
+              <option value="11">พฤศจิกายน</option>
+              <option value="12">ธันวาคม</option>
+            </select>
+            <button type="submit">Predict</button>
+          </form>
+          
+        {% endif %}
+      </div>
+
+    <div class="container">
+        <img src="{{ sector.image.url }}" alt="{{ sector.name }}">
+    </div>
 </body>
 </html>
