@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>River Basin Details</title>
+</head>
+<body>
+    <h2>รายละเอียดลุ่มแม่น้ำ (River Basin Details)</h2>
+    <p>คุณกำลังดูข้อมูลของลุ่มแม่น้ำ ID: {{ location_id }}</p>
+    <a href="/">Back to Map</a>
+    <a href="{% url 'prediction' location_id %}">Prediction</a>
+</body>
+</html>
