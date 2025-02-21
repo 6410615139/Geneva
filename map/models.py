@@ -14,7 +14,7 @@ class Sector(models.Model):
     def get_or_create_result(self, month):
         result, created = Result.objects.get_or_create(sector=self, month=month)
         if result.status == "Dry":
-            result.broadcast()  # Fixed typo
+            result.broadcast()
         return result
 
     def __str__(self):
@@ -54,12 +54,11 @@ class Result(models.Model):
         )
         return message.sid
 
-    @classmethod
-    def broadcast(cls):
+    def broadcast(self):
         """Sends a notification to all members if any result is dry."""
         members = Member.objects.all()
         for member in members:
-            cls.notify(member.phone)
+            self.notify(member.phone)
 
     def __str__(self):
         return f"Result for {self.sector.name} - {self.month}"
