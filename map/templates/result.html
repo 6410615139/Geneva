@@ -1,31 +1,76 @@
 {% load static %} 
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>River Basin Details</title>
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    </head>
-<body>
-    <header>
-        <h2>รายละเอียดลุ่มแม่น้ำ (River Basin Details)</h2>
-        <p>คุณกำลังดูข้อมูลของลุ่มแม่น้ำ ID: {{ sector.id }}</p>
-        <p>คุณกำลังดูข้อมูลของเดือน: {{ result.month }}</p>
-        
-        <nav>
-            <a href="{% url 'sector_view' sector.id %}">Back to Sector</a>
-        </nav>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>River Basin Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
 
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container">
-        <img src="{{ result.rain_image.url }}" alt="{{ sector.name }}">
-    </div>  
-    <div class="container">
-        <img src="{{ result.suggestion_image.url }}" alt="{{ sector.name }}">
+      <h1 class="navbar-brand" >{{ sector.name }}</h1>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'sector_view' sector.id %}">< Back to Sector</a>
+          </li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    
+  <div class="container mb-4">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <img src="{{ result.rain_image.url }}" class="card-img-top img-fluid" style="height: 500px; object-fit: cover;" alt="{{ sector.name }}">
+          <div class="card-body">
+            <h5 class="card-title">ภาพฝนตก</h5>
+            <p class="card-text">แสดงข้อมูลภาพฝนตกของลุ่มแม่น้ำ</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <img src="{{ result.suggestion_image.url }}" class="card-img-top img-fluid" style="height: 500px; object-fit: cover;" alt="{{ sector.name }}">
+          <div class="card-body">
+            <h5 class="card-title">คำแนะนำ</h5>
+            <p class="card-text">แสดงคำแนะนำสำหรับลุ่มแม่น้ำ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-4">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <img src="{{ result.rain_image.url }}" class="card-img-top img-fluid" style="height: 400px; object-fit: cover;" alt="{{ sector.name }}">
+          <div class="card-body">
+            <h5 class="card-title">ภาพฝนตก</h5>
+            <p class="card-text">แสดงข้อมูลภาพฝนตกของลุ่มแม่น้ำ</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <img src="{{ result.suggestion_image.url }}" class="card-img-top img-fluid" style="height: 400px; object-fit: cover;" alt="{{ sector.name }}">
+          <div class="card-body">
+            <h5 class="card-title">คำแนะนำ</h5>
+            <p class="card-text">แสดงคำแนะนำสำหรับลุ่มแม่น้ำ</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

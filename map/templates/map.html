@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thailand River Basins</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-    <style>
-        #map { height: 600px; width: 100%; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>แผนที่ลุ่มแม่น้ำในประเทศไทย</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 </head>
-<body>
-    <h2>แผนที่ลุ่มแม่น้ำในประเทศไทย (Thailand River Basins)</h2>
-    <div id="map"></div>
+<body class="bg-light">
+  <div class="container my-4">
+    <h2 class="text-center mb-4">แผนที่ลุ่มแม่น้ำในประเทศไทย (Thailand River Basins)</h2>
+    <div id="map" class="border rounded" style="height: 80vh;"></div>
+  </div>
 
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        // Initialize Map
-        var map = L.map('map').setView([13.736717, 100.523186], 6);  // Center on Thailand
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Initialize Map
+    var map = L.map('map').setView([13.736717, 100.523186], 6);  // Center on Thailand
 
-        // Load OpenStreetMap Tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+    // Load OpenStreetMap Tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-        // Fetch data from Django
-        fetch('/api/sectors/')  // API endpoint
-            .then(response => response.json())
-            .then(sectors => {
-                sectors.forEach(sector => {
-                    var marker = L.circleMarker([sector.latitude, sector.longitude], {
-                        color: "blue",  // Default color
-                        radius: 10,
-                        fillOpacity: 0.7
-                    }).addTo(map);
+    // Fetch data from Django API
+    fetch('/api/sectors/')
+      .then(response => response.json())
+      .then(sectors => {
+        sectors.forEach(sector => {
+          var marker = L.circleMarker([sector.latitude, sector.longitude], {
+            color: "blue",
+            radius: 10,
+            fillOpacity: 0.7
+          }).addTo(map);
 
-                    marker.bindPopup(`<b>${sector.name}</b><br><a href='/sector/${sector.id}/'>View Details</a>`);
+          marker.bindPopup(`<b>${sector.name}</b><br><a href='/sector/${sector.id}/'>View Details</a>`);
 
-                    marker.on('click', function() {
-                        window.location.href = `/sector/${sector.id}/`;
-                    });
-                });
-            })
-            .catch(error => console.error("Error loading sector data:", error));
-    </script>
+          marker.on('click', function() {
+            window.location.href = `/sector/${sector.id}/`;
+          });
+        });
+      })
+      .catch(error => console.error("Error loading sector data:", error));
+  </script>
 </body>
 </html>
