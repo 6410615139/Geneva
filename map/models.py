@@ -13,8 +13,6 @@ class Sector(models.Model):
 
     def get_or_create_result(self, month):
         result, created = Result.objects.get_or_create(sector=self, month=month)
-        if result.status == "Dry":
-            result.broadcast()
         return result
 
     def __str__(self):
@@ -41,28 +39,44 @@ class Result(models.Model):
     def is_dry(self):
         return self.status == self.DRY
 
+    def __str__(self):
+        return f"Result for {self.sector.name} - {self.month}"
+
+import os
+from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from twilio.rest import Client
+
+class Announcement(models.Model):
+    message = models.CharField(max_length=255, blank=False, null=False)
+
     def notify(self, phone):
-        """Sends SMS notification when status is Dry."""
+        """Sends SMS notification."""
         account_sid = os.getenv("TWILIO_ACCOUNT_SID")
         auth_token = os.getenv("TWILIO_AUTH_TOKEN")
         client = Client(account_sid, auth_token)
 
-        message = client.messages.create(
+        sms = client.messages.create(
             messaging_service_sid=os.getenv("TWILIO_MESSAGING_SERVICE_SID"),
-            body=f"Warning: At {self.sector.name}, in month {self.month}, it is dry!",
+            body=self.message,
             to=phone
         )
-        return message.sid
+        return sms.sid
 
     def broadcast(self):
-        """Sends a notification to all members if any result is dry."""
+        """Sends a notification to all members."""
+        from your_app.models import Member  # Avoid circular import
+
         members = Member.objects.all()
         for member in members:
             self.notify(member.phone)
 
-    def __str__(self):
-        return f"Result for {self.sector.name} - {self.month}"
-
+# Use Django signal to call broadcast after saving a new announcement
+@receiver(post_save, sender=Announcement)
+def send_announcement(sender, instance, created, **kwargs):
+    if created:  # Ensures it only runs when a new record is created
+        instance.broadcast()
 
 class Member(models.Model):
     phone = models.CharField(max_length=15, unique=True)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sector, Result, Member
+from .models import Sector, Result, Member, Announcement
 
 @admin.register(Sector)
 class SectorAdmin(admin.ModelAdmin):
@@ -40,3 +40,8 @@ class ResultAdmin(admin.ModelAdmin):
 class MemberAdmin(admin.ModelAdmin):
     list_display = ('id', 'phone')
     search_fields = ('phone',)
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('message',) 
+
