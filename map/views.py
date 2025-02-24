@@ -45,22 +45,34 @@ def result_view(request, sector_id, month=None):
     data = {"sector": sector, "result": result}
     return render(request, "result.html", data)
 
-@csrf_exempt
+@csrf_exempt  # We need to exempt CSRF since Twilio doesn't use CSRF tokens
 def twilio_webhook(request):
-    """Handle incoming messages from Twilio."""
-    if request.method == "POST":
-        from_number = request.POST.get("From")
-        message_body = request.POST.get("Body")
+    """Securely handle incoming messages from Twilio."""
+    if request.method != "POST":
+        logger.warning("⚠️ Invalid request method")
+        return HttpResponse("Invalid request", status=400)
 
-        logger.info(f"📩 Received SMS from {from_number}: {message_body}")
+    # Validate the request signature from Twilio
+    validator = RequestValidator(TWILIO_AUTH_TOKEN)
+    twilio_signature = request.headers.get("X-Twilio-Signature", "")
 
-        # Process the message (e.g., store in DB, trigger actions, etc.)
+    request_valid = validator.validate(
+        request.build_absolute_uri(), request.POST, twilio_signature
+    )
 
-        # Send a response back to Twilio
-        response = MessagingResponse()
-        response.message(f"Hello! We received your message: {message_body}")
+    if not request_valid:
+        logger.error("🚨 Unauthorized Twilio request detected!")
+        return HttpResponse("Unauthorized", status=403)
 
-        return HttpResponse(str(response), content_type="text/xml")
+    # Process incoming message
+    from_number = request.POST.get("From")
+    message_body = request.POST.get("Body")
 
-    return HttpResponse("Invalid request", status=400)
+    logger.info(f"📩 Securely received SMS from {from_number}: {message_body}")
+
+    # Respond to Twilio with a message
+    response = MessagingResponse()
+    response.message(f"Hello! We received your message securely: {message_body}")
+
+    return HttpResponse(str(response), content_type="application/xml")
 
