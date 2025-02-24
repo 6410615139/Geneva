@@ -66,8 +66,7 @@ class Announcement(models.Model):
 
     def broadcast(self):
         """Sends a notification to all members."""
-        from your_app.models import Member  # Avoid circular import
-
+        
         members = Member.objects.all()
         for member in members:
             self.notify(member.phone)
