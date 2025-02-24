@@ -1,11 +1,11 @@
 from django.db import models
 from twilio.rest import Client
 import os
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# load_dotenv()
+load_dotenv()
 
 class Sector(models.Model):
     name = models.CharField(max_length=255)
