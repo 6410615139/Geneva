@@ -7,7 +7,7 @@ load_dotenv()
 
 class Sector(models.Model):
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='sector/', null=True, blank=True)
+    image = models.ImageField(upload_to='sector/', default='sector/image1.png')
     latitude = models.FloatField()
     longitude = models.FloatField()
 
@@ -34,8 +34,8 @@ class Result(models.Model):
 
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE, related_name="results")
     month = models.CharField(max_length=20)
-    rain_image = models.ImageField(upload_to='rain/', null=True, blank=True)  # Fixed duplicate field
-    suggestion_image = models.ImageField(upload_to='suggestion/', null=True, blank=True)
+    rain_image = models.ImageField(upload_to='rain/',default='rain/rain.png') 
+    suggestion_image = models.ImageField(upload_to='suggestion/', default='suggestion/predict.png')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=NORMAL)
 
     def is_dry(self):
