@@ -1,6 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Sector, Result
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from twilio.twiml.messaging_response import MessagingResponse
+import logging
+
+logger = logging.getLogger(__name__)
 
 def sector_data(request):
     sectors = Sector.objects.values("id", "name", "latitude", "longitude")
@@ -38,3 +44,23 @@ def result_view(request, sector_id, month=None):
 
     data = {"sector": sector, "result": result}
     return render(request, "result.html", data)
+
+@csrf_exempt
+def twilio_webhook(request):
+    """Handle incoming messages from Twilio."""
+    if request.method == "POST":
+        from_number = request.POST.get("From")
+        message_body = request.POST.get("Body")
+
+        logger.info(f"📩 Received SMS from {from_number}: {message_body}")
+
+        # Process the message (e.g., store in DB, trigger actions, etc.)
+
+        # Send a response back to Twilio
+        response = MessagingResponse()
+        response.message(f"Hello! We received your message: {message_body}")
+
+        return HttpResponse(str(response), content_type="text/xml")
+
+    return HttpResponse("Invalid request", status=400)
+

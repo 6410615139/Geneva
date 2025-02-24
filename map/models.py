@@ -1,9 +1,11 @@
 from django.db import models
 from twilio.rest import Client
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-load_dotenv()
+# load_dotenv()
 
 class Sector(models.Model):
     name = models.CharField(max_length=255)
@@ -42,12 +44,6 @@ class Result(models.Model):
     def __str__(self):
         return f"Result for {self.sector.name} - {self.month}"
 
-import os
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from twilio.rest import Client
-
 class Announcement(models.Model):
     message = models.CharField(max_length=255, blank=False, null=False)
 
@@ -66,15 +62,13 @@ class Announcement(models.Model):
 
     def broadcast(self):
         """Sends a notification to all members."""
-        
         members = Member.objects.all()
         for member in members:
             self.notify(member.phone)
 
-# Use Django signal to call broadcast after saving a new announcement
 @receiver(post_save, sender=Announcement)
 def send_announcement(sender, instance, created, **kwargs):
-    if created:  # Ensures it only runs when a new record is created
+    if created:
         instance.broadcast()
 
 class Member(models.Model):
