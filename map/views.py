@@ -21,14 +21,14 @@ def sector_view(request, sector_name):
     # If form is submitted, get the month and redirect to result_view
     month = request.GET.get("month")
     if month:
-        return result_view(request, sector_id, month)
+        return result_view(request, sector_name, month)
 
     data = {"sector": sector}
     return render(request, "sector.html", data)
 
-def result_view(request, sector_id, month=None):
+def result_view(request, sector_name, month=None):
     """Displays the result for a given sector and month."""
-    sector = get_object_or_404(Sector, id=sector_id)
+    sector = get_object_or_404(Sector, name=sector_name)
 
     # Get month from request if not provided
     month = request.GET.get("month", month)
