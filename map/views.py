@@ -8,19 +8,15 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def sector_data(request):
-    sectors = Sector.objects.values("id", "name", "latitude", "longitude")
-    return JsonResponse(list(sectors), safe=False)
-
 def map_view(request):
     """Displays all sectors on the map."""
     sectors = Sector.objects.all()
     data = {"sectors": sectors}
     return render(request, "map.html", data)
 
-def sector_view(request, sector_id):
+def sector_view(request, sector_name):
     """Displays details of a specific sector and handles form submission."""
-    sector = get_object_or_404(Sector, id=sector_id)
+    sector = Sector.objects.get_or_create(name=sector_name)
 
     # If form is submitted, get the month and redirect to result_view
     month = request.GET.get("month")

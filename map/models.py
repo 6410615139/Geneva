@@ -10,8 +10,6 @@ load_dotenv()
 class Sector(models.Model):
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='sector/', default='sector/image1.png')
-    latitude = models.FloatField()
-    longitude = models.FloatField()
 
     def get_or_create_result(self, month):
         result, created = Result.objects.get_or_create(sector=self, month=month)
