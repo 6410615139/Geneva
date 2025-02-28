@@ -1,15 +1,10 @@
-{% load static %} 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ sector.name }} - Details</title>
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}{{ sector.name }} - Details{% endblock %}
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-</head>
-<body class="bg-light">
+
+{% block content %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
     <div class="container">
       <h1 class="navbar-brand" href="/">{{ sector.name }}</h1>
@@ -82,12 +77,17 @@
     </div>
   </div>
 
-  <div class="container">
-    <div class="card shadow-sm">
-      <img src="{{ sector.image.url }}" alt="{{ sector.name }}" class="card-img-top img-fluid" >
-    </div>
-  </div>
+  <div id="map" class="border rounded" style="height: 80vh;"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Pass the static file path as a JavaScript variable -->
+<script>
+  var kmzFilePath = "{% static 'kmz/Thaibasin.kmz' %}";
+</script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-kmz@latest/dist/leaflet-kmz.js"></script>
+<script src="{% static 'js/sector.js' %}"></script>
+{% endblock %}
