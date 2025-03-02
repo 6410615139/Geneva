@@ -4,8 +4,15 @@
 {% block title %}แผนที่ลุ่มแม่น้ำในประเทศไทย{% endblock %}
 
 {% block content %}
-<h2 class="text-center mb-4">แผนที่ลุ่มแม่น้ำในประเทศไทย (Thailand River Basins)</h2>
-<div id="map" class="border rounded" style="height: 80vh;"></div>
+<div class="position-relative vh-100">
+  <h2 class="position-absolute start-50 translate-middle-x bg-white px-4 py-2 shadow rounded-pill" 
+      style="top: 20px; font-size: 1rem; z-index: 10;">
+      แผนที่ลุ่มแม่น้ำในประเทศไทย (Thailand River Basins)
+  </h2>
+  <div id="map" class="border rounded position-relative top-0 start-0 w-100 h-100" style="height: 80vh; z-index: 1;"></div>
+</div>
+
+
 {% endblock %}
 
 {% block extra_js %}

@@ -5,26 +5,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 {% block content %}
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-    <div class="container">
-      <h1 class="navbar-brand" href="/">{{ sector.name }}</h1>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'map_view'%}">< Back to Map</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <div class="container mb-4">
-    
-    <div class="card shadow-sm">
-      <div class="card-body text-center">
+  <div class="position-relative vh-100">
+    <h2 class="position-absolute translate-middle-x px-4 py-2 " 
+      style="top: 20px; left: 150px; font-size: 2rem; z-index: 10;">
+      <a>ลุ่มแม่น้ำปิง</a>
+    </h2>
+    <h2 class="position-absolute end-0 start-50 translate-middle-x px-4 py-2 shadow rounded-pill" 
+        style="top: 20px; background-color: rgba(255, 255, 255, 0.55); font-size: 1rem; z-index: 10;">
         {% if month %}
           <p class="card-text">
             <strong>ผลการ Predict</strong> สำหรับลุ่มแม่น้ำ <strong>{{ sector.name }}</strong> (ID: {{ sector.id }})  
@@ -32,53 +19,35 @@
           </p>
         {% else %}
         <form method="get" id="monthForm">
-          <div class="row row-cols-12 g-2">
+          <div class="row row-cols-12 ">
             <div class="col">
-              <button type="submit" name="month" value="1" class="btn btn-outline-primary w-100">มกราคม</button>
+            </div>
+            <div class="col-3">
+              <button type="submit" name="month" value="6" class="btn" style="font-size: 1.2rem;">มิถุนายน</button>
             </div>
             <div class="col">
-              <button type="submit" name="month" value="2" class="btn btn-outline-primary w-100">กุมภาพันธ์</button>
+            </div>
+            <div class="col-3">
+              <button type="submit" name="month" value="8" class="btn"style="font-size: 1.2rem;">กรกฎาคม</button>
             </div>
             <div class="col">
-              <button type="submit" name="month" value="3" class="btn btn-outline-primary w-100">มีนาคม</button>
             </div>
-            <div class="col">
-              <button type="submit" name="month" value="4" class="btn btn-outline-primary w-100">เมษายน</button>
+            <div class="col-3">
+              <button type="submit" name="month" value="10" class="btn"style="font-size: 1.2rem;">สิงหาคม</button>
             </div>
-            <div class="col">
-              <button type="submit" name="month" value="5" class="btn btn-outline-primary w-100">พฤษภาคม</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="6" class="btn btn-outline-primary w-100">มิถุนายน</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="7" class="btn btn-outline-primary w-100">กรกฎาคม</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="8" class="btn btn-outline-primary w-100">สิงหาคม</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="9" class="btn btn-outline-primary w-100">กันยายน</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="10" class="btn btn-outline-primary w-100">ตุลาคม</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="11" class="btn btn-outline-primary w-100">พฤศจิกายน</button>
-            </div>
-            <div class="col">
-              <button type="submit" name="month" value="12" class="btn btn-outline-primary w-100">ธันวาคม</button>
-            </div>
+            
           </div>
         </form>
-        
         {% endif %}
-      </div>
-    </div>
+      <h2 class="position-absolute translate-middle-x px-4 py-2 " 
+        style="top: 35px; right: 50px; font-size: 1rem; z-index: 10;">
+        <a href="{% url 'map_view'%}">< Map</a>
+      </h2>
+    </h2>
+    <div id="map" class="border rounded position-relative top-0 start-0 w-100 h-100" style="height: 80vh; z-index: 1;"></div>
   </div>
 
-  <div id="map" class="border rounded" style="height: 80vh;"></div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
 
