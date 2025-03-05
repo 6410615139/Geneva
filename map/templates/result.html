@@ -8,19 +8,25 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-
   <nav class="navbar navbar-expand-lg navbar-dark bg-secondary mb-4">
     <div class="container">
-      <ul class="navbar-nav ms-auto">
-          <a class="navbar-brand" >{{ sector.name }}</a>
-      </ul>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'sector_view' sector.name %}">< Sector</a>
-          </li>
-        </ul>
-      </div>
+        <!-- Navbar Brand (Sector Name) -->
+        <a class="navbar-brand me-auto">{{ sector.name }}</a>
+
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible Menu -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sector_view' sector.name %}">< Back Sector</a>
+                </li>
+            </ul>
+        </div>
     </div>
   </nav>
 
@@ -38,29 +44,6 @@
       <div class="col-md-6">
         <div class="card shadow-sm">
           <img src="{{ result.suggestion_image.url }}" class="card-img-top img-fluid" style="height: 500px; object-fit: cover;" alt="{{ sector.name }}">
-          <div class="card-body">
-            <h5 class="card-title">คำแนะนำ</h5>
-            <p class="card-text">แสดงคำแนะนำสำหรับลุ่มแม่น้ำ</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container mb-4">
-    <div class="row g-4">
-      <div class="col-md-6">
-        <div class="card shadow-sm">
-          <img src="{{ result.rain_image.url }}" class="card-img-top img-fluid" style="height: 400px; object-fit: cover;" alt="{{ sector.name }}">
-          <div class="card-body">
-            <h5 class="card-title">ภาพฝนตก</h5>
-            <p class="card-text">แสดงข้อมูลภาพฝนตกของลุ่มแม่น้ำ</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card shadow-sm">
-          <img src="{{ result.suggestion_image.url }}" class="card-img-top img-fluid" style="height: 400px; object-fit: cover;" alt="{{ sector.name }}">
           <div class="card-body">
             <h5 class="card-title">คำแนะนำ</h5>
             <p class="card-text">แสดงคำแนะนำสำหรับลุ่มแม่น้ำ</p>
