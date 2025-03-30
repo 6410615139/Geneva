@@ -16,7 +16,7 @@ def map_view(request):
 
 def sector_map(request, sector_name):
     """Displays details of a specific sector and handles form submission."""
-    sector, created = Sector.objects.get_or_create(name=sector_name) 
+    sector = Sector.objects.filter(name='Ping', month='January').first()
     
     month = request.GET.get("month")
     if month:
