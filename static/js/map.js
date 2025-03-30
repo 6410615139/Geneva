@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Redirect function triggered by the button in the popup
 function redirectToSector(sectorName) {
     if (sectorName !== "Unknown") {
-        window.location.href = `/sector/${sectorName}/`;
+        window.location.href = `/sector_map/${sectorName}/`;
     } else {
         alert("Sector name not available.");
     }

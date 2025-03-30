@@ -1,47 +1,78 @@
 {% extends "layout.html" %}
 {% load static %}
 {% block title %}{{ sector.name }} - Details{% endblock %}
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 {% block content %}
-<div class="position-relative vh-100">
-  <h2 class="position-absolute translate-middle-x px-4 py-2 rounded-pill text-center" 
-    style="top: 10px; left: 45%; transform: translateX(-50%); font-size: 1rem; z-index: 10;">
-    {% if month %}
-      <p class="card-text">
-        <strong>ผลการ Predict</strong> สำหรับลุ่มแม่น้ำ <strong>{{ sector.name }}</strong> (ID: {{ sector.id }})  
-        เดือนที่ <span class="badge bg-success">{{ month }}</span>
-      </p>
-    {% else %}
-    <form method="get" id="monthForm" class="d-flex align-items-center">
-      <select name="month" id="monthSelect" class="form-select w-auto">
-        <option value="6">มิถุนายน</option>
-        <option value="7">กรกฎาคม</option>
-        <option value="8">สิงหาคม</option>
-      </select>
-      <button type="submit" class="btn btn-primary ms-2">เลือก</button>
-    </form>
-    {% endif %}
-  </h2>
-
   <h2 class="position-absolute px-3 py-2" 
-    style="top: 700px; right: 10px; font-size: 1.2rem; z-index: 1000;">
-    <a href="{% url 'map_view' %}" class="btn btn-light shadow " style="padding: 10px 15px;">
-      <
+    style="top: 10px; left: 10px; font-size: 1.2rem; z-index: 1000;">
+    <a href="{% url 'sector_map' sector %}" class="btn btn-light shadow " style="padding: 10px 15px;">
+      < Previous
     </a>
   </h2>
-  
-  <div id="map" class="border rounded position-relative top-0 start-0 w-100 h-100" style="height: 80vh; z-index: 1;"></div>
+
+  <div class="position-relative vh-100" style="top: 80px;">
+    <div class="container mb-4">
+        <div class="row g-4">
+            <div class="col-md-9">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" style="font-size: 2rem;">
+                            Select Month of forecast (3 months ahead)
+                        </h5>
+                    </div>
+                    <img src="{{ sector.image.url }}" class="card-img-top img-fluid" 
+                         style="height: 800px; object-fit: contain;" alt="{{ sector.name }}">
+                </div>
+            </div>
+            <div class="col-md-3" style="font-size: 3rem;">
+              <form method="get" id="monthForm" class="d-flex flex-column align-items-center p-3" 
+              action="{% url 'rain_view' sector.name %}">
+                  <ul class="nav nav-tabs w-100 justify-content-center mb-3" id="monthTabs">
+                      <li class="nav-item">
+                          <a class="nav-link active" href="javascript:void(0);" 
+                            onclick="selectMonth(event, 'January', this)">January</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="javascript:void(0);" 
+                            onclick="selectMonth(event, 'February', this)">February</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="javascript:void(0);" 
+                            onclick="selectMonth(event, 'March', this)">March</a>
+                      </li>
+                  </ul>
+                  <input type="hidden" name="month" id="selectedMonth" value="January">
+                  <button type="submit" class="btn btn-primary mt-3">Submit</button>
+              </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+  
+  
   
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
 
 {% block extra_js %}
-<!-- Pass the static file path as a JavaScript variable -->
 <script>
   var kmzFilePath = "{% static 'kmz/Thaibasin.kmz' %}";
+</script>
+<script>
+  function selectMonth(event, month, element) {
+      // เปลี่ยนค่าใน input type hidden
+      document.getElementById("selectedMonth").value = month;
+
+      // เปลี่ยนสถานะ active ของแต่ละเดือน
+      var tabs = document.querySelectorAll('#monthTabs .nav-link');
+      tabs.forEach(tab => {
+          tab.classList.remove('active'); // ลบ active จากทุกแท็บ
+      });
+      
+      element.classList.add('active'); // เพิ่ม active ให้กับแท็บที่ถูกคลิก
+  }
 </script>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-kmz@latest/dist/leaflet-kmz.js"></script>

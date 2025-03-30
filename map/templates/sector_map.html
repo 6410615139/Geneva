@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block title %}{{ sector.name }} - Details{% endblock %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+{% block content %}
+  <h2 class="position-absolute px-3 py-2" 
+    style="top: 10px;  font-size: 1.2rem; z-index: 1000;">
+    <a href="{% url 'map_view' %}" class="btn btn-light shadow " style="padding: 10px 15px;">
+      < Previous
+    </a>
+  </h2>
+
+  <h2 class="position-absolute px-3 py-2" 
+    style="top: 10px; right: 10px; font-size: 1.2rem; z-index: 1000;">
+    <a href="{% url 'sector_view' sector.name %}" class="btn btn-light shadow " style="padding: 10px 15px;">
+      Next >
+    </a>
+  </h2>
+
+  <div class="position-relative vh-100" style="top: 80px;">
+    <div class="container mb-4">
+      <div class="row g-4">
+        <div class="col-md-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-center" style="font-size: 2rem;">Present landuse in Ping River Basin</h5>
+            </div>
+            <img src="{{ sector.image.url }}" class="card-img-top img-fluid" style="height: 100%; object-fit: cover;" alt="{{ sector.name }}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

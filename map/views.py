@@ -14,17 +14,26 @@ def map_view(request):
     data = {"sectors": sectors}
     return render(request, "map.html", data)
 
-def sector_view(request, sector_name):
+def sector_map(request, sector_name):
     """Displays details of a specific sector and handles form submission."""
-    sector = Sector.objects.get_or_create(name=sector_name)
-
-    # If form is submitted, get the month and redirect to result_view
+    sector, created = Sector.objects.get_or_create(name=sector_name) 
+    
     month = request.GET.get("month")
     if month:
         return result_view(request, sector_name, month)
 
     data = {"sector": sector}
-    return render(request, "sector.html", data)
+    return render(request, "sector_map.html", data)
+
+def sector_view(request, sector_name):
+    """Displays details of a specific sector and handles form submission."""
+    sector = Sector.objects.filter(name='Ping', month='January').first()
+    
+    month = request.GET.get("month")
+    if month:
+        return redirect("result_view", sector_name=sector_name, month=month)
+
+    return render(request, "sector.html", {"sector": sector})
 
 def result_view(request, sector_name, month=None):
     """Displays the result for a given sector and month."""
@@ -32,14 +41,55 @@ def result_view(request, sector_name, month=None):
 
     # Get month from request if not provided
     month = request.GET.get("month", month)
-
     if not month:
         return render(request, "error.html", {"message": "Please provide a valid month."})
 
-    result = sector.get_or_create_result(month)
+    result, created = Result.objects.get_or_create(sector=sector, month=month)
 
-    data = {"sector": sector, "result": result}
-    return render(request, "result.html", data)
+    return render(request, "result.html", {"sector": sector, "result": result})
+
+def rain_view(request, sector_name):
+    """Displays rainfall data for a specific sector."""
+    month = request.GET.get("month", "January")
+    
+    sector = Sector.objects.filter(name=sector_name, month=month).first()
+    
+    return render(request, "rain.html", {"sector": sector, "month": month})
+
+
+def spi_view(request, sector_name):
+    """Displays SPI data for a specific sector."""
+    month = request.GET.get("month", "January")
+    
+    sector = Sector.objects.filter(name=sector_name, month=month).first()
+
+    return render(request, "spi.html", {"sector": sector, "month": month})
+
+
+def warning_view(request, sector_name):
+    """Displays drought warning data for a specific sector."""
+    month = request.GET.get("month", "January")
+    
+    sector = Sector.objects.filter(name=sector_name, month=month).first()
+
+    return render(request, "warning.html", {"sector": sector, "month": month})
+
+
+def crop_view(request, sector_name):
+    """Displays crop-related data for a specific sector."""
+    month = request.GET.get("month", "January")
+    
+    sector = Sector.objects.filter(name=sector_name, month=month).first()
+
+    return render(request, "cropping.html", {"sector": sector, "month": month})
+
+def income_view(request, sector_name):
+    """Displays crop-related data for a specific sector."""
+    month = request.GET.get("month", "January")
+    
+    sector = Sector.objects.filter(name=sector_name, month=month).first()
+
+    return render(request, "income.html", {"sector": sector, "month": month})
 
 @csrf_exempt  # We need to exempt CSRF since Twilio doesn't use CSRF tokens
 def twilio_webhook(request):

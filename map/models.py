@@ -9,9 +9,21 @@ load_dotenv()
 
 class Sector(models.Model):
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='sector/', default='sector/image1.png')
+    month = models.CharField(max_length=20)
+    image = models.ImageField(upload_to='sector/', default='sector/default.png')
+    rain_image = models.ImageField(upload_to='suggestion/', default='suggestion/P1_Jan.png')
+    spi = models.ImageField(upload_to='suggestion/', default='suggestion/S1_Jan.png')
+    drought_warning = models.ImageField(upload_to='suggestion/', default='suggestion/W_0.png')
+    crop = models.ImageField(upload_to='suggestion/', default='suggestion/Jan.png')
+    suggestion_image = models.ImageField(upload_to='suggestion/', default='suggestion/Jan_suggestion.png')
+    income = models.ImageField(upload_to='suggestion/', default='suggestion/Income_Jan.png')
+    
+    class Meta:
+        unique_together = ['name', 'month']
 
-    def get_or_create_result(self, month):
+    def get_or_create_result(self, month=None):
+        if month is None:
+            month = self.month
         result, created = Result.objects.get_or_create(sector=self, month=month)
         return result
 
@@ -32,7 +44,8 @@ class Result(models.Model):
 
     sector = models.ForeignKey(Sector, on_delete=models.CASCADE, related_name="results")
     month = models.CharField(max_length=20)
-    rain_image = models.ImageField(upload_to='rain/',default='rain/rain.png') 
+    
+    rain_image = models.ImageField(upload_to='suggestion/',default='suggestion/rain.png')
     suggestion_image = models.ImageField(upload_to='suggestion/', default='suggestion/predict.png')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=NORMAL)
 

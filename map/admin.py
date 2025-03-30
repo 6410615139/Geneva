@@ -3,9 +3,9 @@ from .models import Sector, Result, Member, Announcement
 
 @admin.register(Sector)
 class SectorAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'image_preview')
+    list_display = ('id', 'name', 'month', 'image_preview')
     search_fields = ('name',)
-    readonly_fields = ('image_preview',)  # To show image preview in admin panel
+    readonly_fields = ('image_preview',)
 
     def image_preview(self, obj):
         if obj.image:
