@@ -22,13 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    // Instantiate KMZ layer (async)
-    var kmz = L.kmzLayer().addTo(map);
+    var kmzLayer = new L.KMZLayer();
 
     // Define control layers before use
     var control = L.control.layers(null, null, { collapsed: false }).addTo(map);
 
-    kmz.on('load', function (e) {
+    kmzLayer.on('load', function (e) {
         var layer = e.layer;
         layer.setStyle(kmzLayerStyle); // Apply the border style
 
@@ -78,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Load KMZ file
-    kmz.load('/static/kmz/Thaibasin.kmz');  // Ensure correct path
+    kmzLayer.load('/static/kmz/Thaibasin.kmz');
 });
 
 // Redirect function triggered by the button in the popup
